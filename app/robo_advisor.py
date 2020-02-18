@@ -18,7 +18,27 @@ response = requests.get(request_url)
 parsed_response = json.loads(response.text)
 
 last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
-latest_close = parsed_response["Time Series (Daily)"][last_refreshed]["4. close"]
+
+tsd = parsed_response["Time Series (Daily)"]
+dates = list(tsd.keys()) #what's keys() --> returns all keys of "TSD" list (consider sorting to ensure first day is first)
+latest_day = dates[0]
+latest_close = tsd[latest_day]["4. close"]
+
+high_prices = []
+low_prices = []
+
+for date in dates:
+    high_price = tsd[date]["2. high"]
+    low_price = tsd[date]["3. low"]
+    high_prices.append(float(high_price))
+    low_prices.append(float(low_price))
+
+recent_high = max(high_prices)
+recent_low = min(low_prices)
+
+if "Error Message" in response.text:
+    print("OOPS couldn't find that symbol, please try again!")
+    exit()
 
 
 print("-------------------------")
@@ -29,8 +49,8 @@ print("REQUEST AT: 2018-02-20 02:00pm")
 print("-------------------------")
 print(f"LATEST DAY: {last_refreshed}")
 print(f"LATEST CLOSE: {to_usd(float(latest_close))}")
-print("RECENT HIGH: $101,000.00")
-print("RECENT LOW: $99,000.00")
+print(f"RECENT HIGH: {to_usd(float(recent_high))}")
+print(f"RECENT LOW: {to_usd(float(recent_low))}")
 print("-------------------------")
 print("RECOMMENDATION: BUY!")
 print("RECOMMENDATION REASON: TODO")
