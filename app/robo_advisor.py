@@ -5,6 +5,10 @@ import json
 import os
 import csv
 from dotenv import load_dotenv
+from datetime import datetime
+
+d = datetime.now()
+dt = d.strftime("%m/%d/%Y %H:%M")
 
 load_dotenv()
 
@@ -46,8 +50,6 @@ for date in dates:
 recent_high = max(high_prices)
 recent_low = min(low_prices)
 
-
-
 csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
 
 csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
@@ -66,13 +68,11 @@ with open(csv_file_path, "w") as csv_file:
             "volume": daily_prices["5. volume"]
         })
     
-
-
 print("-------------------------")
 print(f"SELECTED SYMBOL: {symbol}")
 print("-------------------------")
 print("REQUESTING STOCK MARKET DATA...")
-print("REQUEST AT: 2018-02-20 02:00pm") #dynamic
+print(f"REQUEST AT: {dt}") 
 print("-------------------------")
 print(f"LATEST DAY: {last_refreshed}")
 print(f"LATEST CLOSE: {to_usd(float(latest_close))}")
