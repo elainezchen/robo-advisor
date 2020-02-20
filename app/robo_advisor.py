@@ -50,8 +50,15 @@ for date in dates:
 recent_high = max(high_prices)
 recent_low = min(low_prices)
 
-csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
+#if stock's latest closing price < 20% above its recent low - buy
+if (float(latest_close) <= (1.2 * float(recent_low))):
+    rec = "BUY"
+    rec_exp = "The latest closing price of " + symbol + " is less than 20% above its recent low. Now is a good time to buy."
+else:
+    rec = "DON'T BUY"
+    rec_exp = "The latest closing price of " + symbol + " is more than 20% above its recent low. You should wait until the price drops."
 
+csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
 csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
 
 with open(csv_file_path, "w") as csv_file:
@@ -79,11 +86,10 @@ print(f"LATEST CLOSE: {to_usd(float(latest_close))}")
 print(f"RECENT HIGH: {to_usd(float(recent_high))}")
 print(f"RECENT LOW: {to_usd(float(recent_low))}")
 print("-------------------------")
-print("RECOMMENDATION: BUY!") #dynamic
-print("RECOMMENDATION REASON: TODO") #dynamic
+print(f"RECOMMENDATION: {rec}") #dynamic
+print(f"RECOMMENDATION REASON: {rec_exp}") #dynamic
 print("-------------------------")
 print(f"WRITING DATA TO CSV: {csv_file_path}...")
 print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
-
