@@ -98,19 +98,22 @@ print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
 
+answer = input("Would you like to create a line graph of recent high, low, and closing prices for " + symbol + "? [Y/N] ")
+if answer.lower() != "y":
+    print("Thank you for using Robo Advisor!")
+    exit()
+else:
+    stock_dates = ""
+    stock_price = [d for d in high_prices]
 
-print("----------------")
-print("GENERATING LINE GRAPH...")
+    plt.plot(dates, high_prices, label = "High Prices")
+    plt.plot(dates, low_prices, label = "Low Prices")
+    plt.plot(dates, closing_prices, label = "Closing Prices")
 
-stock_dates = mdates.drange()
-stock_price = [d for d in high_prices]
-
-plt.plot(dates, high_prices, label = "High Prices")
-plt.plot(dates, low_prices, label = "Low Prices")
-plt.plot(dates, closing_prices, label = "Closing Prices")
-
-plt.xlabel("Date")
-plt.ylabel("Stock Price USD")
-plt.title("Line Chart")
-plt.legend(loc = "upper right")
-plt.show()
+    plt.xlabel("Date")
+    plt.ylabel("Stock Price USD")
+    plt.title(symbol + "'s High, Low, and Closing Prices Over Time")
+    plt.legend(loc = "upper right")
+    plt.show()
+    
+    print("Thank you for using Robo Advisor!")

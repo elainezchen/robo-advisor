@@ -1,5 +1,9 @@
 # "Robo Advisor" Project
 
+## Introduction
+
+This app will help your customers decide when making investment decisions and stock trading recommendations. 
+
 ## Repo Setup
 
 The repository can be accessed at https://github.com/elainezchen/robo-advisor. 
@@ -31,9 +35,10 @@ python app/robo_advisor.py
 
 pip install matplotlib
 
-(COPY CREATE ENVIRONMENT FROM CLASS GUIDE)
-
-
-also instructions on creating environment variable ALPHAVANTAGE_API_KEY
+also instructions on creating environment variable ALPHAVANTAGE_API_KEY / acquisition, "env" file setup instructions
 
 ## Usage
+
+The user should input a stock symbol into the program when prompted (for example, "K", "AAPL", "MSFT"). 
+
+The program will then compile all recent opening and closing prices, as well as highs and lows, and write it into a csv file. In addition, the program will recommend whether or not the user should buy the stock and offer a reason why. 
