@@ -116,6 +116,7 @@ while True:
         plt.legend(loc = "upper right")
         ax.axes.get_xaxis().set_visible(False)
         plt.show()
+        break
 
     elif answer.lower() == "n":        
         break
