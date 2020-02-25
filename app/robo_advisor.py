@@ -141,7 +141,7 @@ while True:
         elif (float(latest_close)<=(0.95*float(previous_close))):
             html_variable = "decreased"
         else:
-            print("The email and text will be sent if the price has changed. Thank you for using Robo Advisor!")
+            print("The email and text will be not be sent since the price has not changed. Thank you for using Robo Advisor!")
             exit()
 
         html_content = f"""
@@ -163,7 +163,7 @@ while True:
         client2 = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
         content = f"The price for {symbol} has {html_variable} by more than 5% in the past day."
         message2 = client2.messages.create(to=number, from_=SENDER_SMS, body=content)
-        
+
         print("The email and text have been sent. Thank you for using Robo Advisor!")
         exit()
 
