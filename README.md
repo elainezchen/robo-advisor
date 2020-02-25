@@ -33,9 +33,15 @@ To run the Python script from within the virtual environment:
 python app/robo_advisor.py
 ```
 
-pip install matplotlib
+## Security Requirements
 
-also instructions on creating environment variable ALPHAVANTAGE_API_KEY / acquisition, "env" file setup instructions
+We will be referencing an API Key for the program. In order to get your API Key, you should navigate to the site https://www.alphavantage.co/ and click on "Get Your Free API Key Today". Fill out the required information and copy your API Key.
+
+Before running the program, make sure to create a ".env" file. The API Key will be placed in the .env file. Sample file contents could include:
+
+```sh
+ALPHAVANTAGE_API_KEY="abc123" # "abc123" being your API Key
+```
 
 ## Usage
 

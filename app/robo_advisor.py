@@ -7,7 +7,6 @@ import csv
 from dotenv import load_dotenv
 from datetime import datetime
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 
 d = datetime.now()
 dt = d.strftime("%m/%d/%Y %H:%M")
@@ -62,7 +61,7 @@ else:
     rec = "DON'T BUY"
     rec_exp = "The latest closing price of " + symbol + " is more than 20% above its recent low. You should wait until the price drops."
 
-csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv") #can add symbol but makes new file every time
+csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv") 
 csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
 
 with open(csv_file_path, "w") as csv_file:
@@ -103,17 +102,15 @@ if answer.lower() != "y":
     print("Thank you for using Robo Advisor!")
     exit()
 else:
-    stock_dates = ""
-    stock_price = [d for d in high_prices]
-
+    ax = plt.gca()
     plt.plot(dates, high_prices, label = "High Prices")
     plt.plot(dates, low_prices, label = "Low Prices")
     plt.plot(dates, closing_prices, label = "Closing Prices")
 
-    plt.xlabel("Date")
     plt.ylabel("Stock Price USD")
     plt.title(symbol + "'s High, Low, and Closing Prices Over Time")
     plt.legend(loc = "upper right")
+    ax.axes.get_xaxis().set_visible(False)
     plt.show()
-    
+
     print("Thank you for using Robo Advisor!")
