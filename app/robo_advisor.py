@@ -7,6 +7,8 @@ import csv
 from dotenv import load_dotenv
 from datetime import datetime
 import matplotlib.pyplot as plt
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 d = datetime.now()
 dt = d.strftime("%m/%d/%Y %H:%M")
@@ -37,7 +39,9 @@ last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
 tsd = parsed_response["Time Series (Daily)"]
 dates = list(tsd.keys()) 
 latest_day = dates[0]
+previous_day = dates[1]
 latest_close = tsd[latest_day]["4. close"]
+previous_close = tsd[previous_day]["4. close"]
 
 high_prices = []
 low_prices = []
@@ -97,20 +101,69 @@ print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
 
-answer = input("Would you like to create a line graph of recent high, low, and closing prices for " + symbol + "? [Y/N] ")
-if answer.lower() != "y":
-    print("Thank you for using Robo Advisor!")
-    exit()
-else:
-    ax = plt.gca()
-    plt.plot(dates, high_prices, label = "High Prices")
-    plt.plot(dates, low_prices, label = "Low Prices")
-    plt.plot(dates, closing_prices, label = "Closing Prices")
+while True:
+    answer = input("Would you like to create a line graph of recent high, low, and closing prices for " + symbol + "? [Y/N] ")
+    if answer.lower() == "y":
 
-    plt.ylabel("Stock Price USD")
-    plt.title(symbol + "'s High, Low, and Closing Prices Over Time")
-    plt.legend(loc = "upper right")
-    ax.axes.get_xaxis().set_visible(False)
-    plt.show()
+        ax = plt.gca()
+        plt.plot(dates, high_prices, label = "High Prices")
+        plt.plot(dates, low_prices, label = "Low Prices")
+        plt.plot(dates, closing_prices, label = "Closing Prices")
 
-    print("Thank you for using Robo Advisor!")
+        plt.ylabel("Stock Price USD")
+        plt.title(symbol + "'s High, Low, and Closing Prices Over Time")
+        plt.legend(loc = "upper right")
+        ax.axes.get_xaxis().set_visible(False)
+        plt.show()
+
+    elif answer.lower() == "n":        
+        break
+
+    else:
+        print("Please input [Y] or [N] only.")
+
+while True:
+    answer2 = input("Would the customer like to be notified if the price has increased or decreased by more than 5% within the past day? [Y/N] ")
+    if answer2.lower() == "y":
+        email = input("What is the customer's email address? ")
+        SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
+        client = SendGridAPIClient(SENDGRID_API_KEY)
+        subject = "Price Change Notification"
+        if (float(previous_close)>=(1.05*float(latest_close))):
+            html_variable = "increased"
+        elif (float(previous_close)<=(0.95*float(latest_close))):
+            html_variable = "decreased"
+        else:
+            print("The email will be sent if the price has changed. Thank you for using Robo Advisor!")
+            exit()
+
+        html_content = f"""
+        <h3>Price Change Notification</h3>
+        <p>Current date and time: {dt} </p>
+        <p>Latest day acquired for {symbol}: {latest_day} </p>
+        <p>Latest closing price: {to_usd(float(latest_close))} </p>
+        <p>Previous closing price: {to_usd(float(previous_close))} </p>
+        <p>{symbol}'s price has {html_variable} by more than 5% in the past day.</p>
+        """
+
+        message = Mail(from_email=email, to_emails=email, subject=subject, html_content=html_content)
+
+        try:
+            response = client.send(message)
+        except Exception as e:
+            print("OOPS", e.message)
+
+        print("The email has been sent. Thank you for using Robo Advisor!")
+        exit()
+
+    elif answer2.lower() == "n":
+
+        print("Thank you for using Robo Advisor!")
+        exit()
+
+    else:
+        print("Please input [Y] or [N] only.")
+
+        
+
+

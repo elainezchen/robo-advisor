@@ -35,12 +35,17 @@ python app/robo_advisor.py
 
 ## Security Requirements
 
-We will be referencing an API Key for the program. In order to get your API Key, you should navigate to the site https://www.alphavantage.co/ and click on "Get Your Free API Key Today". Fill out the required information and copy your API Key.
+We will be referencing an API Key for the program. In order to get your API Key, you should navigate to <a href="https://www.alphavantage.co/">this site</a>  and click on "Get Your Free API Key Today". Fill out the required information and copy your API Key.
 
-Before running the program, make sure to create a ".env" file. The API Key will be placed in the .env file. Sample file contents could include:
+Before running the program, make sure to create a ".env" file. The API Key will be stored in the .env file under "ALPHAVANTAGE_API_KEY". 
+
+We will also need a SendGrid API Key. Log into your account <a href="https://signup.sendgrid.com/">here</a> or sign up for a free account if you do not have one already. Make sure to click on the confirmation email to verify your account once you sign up. After that, <a href="https://app.sendgrid.com/settings/api_keys">create</a> an API Key with "full access" permissions. Store the Sendgrid API Key in an environment variable called "SENDGRID_API_KEY" in the .env file as well.
+
+Sample file contents of the .env file could include:
 
 ```sh
 ALPHAVANTAGE_API_KEY="abc123" # "abc123" being your API Key
+SENDGRID_API_KEY="123abc"
 ```
 
 ## Usage
