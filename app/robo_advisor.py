@@ -129,9 +129,9 @@ while True:
         SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
         client = SendGridAPIClient(SENDGRID_API_KEY)
         subject = "Price Change Notification"
-        if (float(previous_close)>=(1.05*float(latest_close))):
+        if (float(latest_close)>=(1.05*float(previous_close))):
             html_variable = "increased"
-        elif (float(previous_close)<=(0.95*float(latest_close))):
+        elif (float(latest_close)<=(0.95*float(previous_close))):
             html_variable = "decreased"
         else:
             print("The email will be sent if the price has changed. Thank you for using Robo Advisor!")
