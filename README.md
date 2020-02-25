@@ -41,11 +41,16 @@ Before running the program, make sure to create a ".env" file. The API Key will 
 
 We will also need a SendGrid API Key. Log into your account <a href="https://signup.sendgrid.com/">here</a> or sign up for a free account if you do not have one already. Make sure to click on the confirmation email to verify your account once you sign up. After that, <a href="https://app.sendgrid.com/settings/api_keys">create</a> an API Key with "full access" permissions. Store the Sendgrid API Key in an environment variable called "SENDGRID_API_KEY" in the .env file as well.
 
+Finally, we will need several API Keys for Twilio. First <a href="https://www.twilio.com/try-twilio">sign up</a> for a Twilio account here and click on the confirmation email to verify your account once you sign up. Next, <a href="https://www.twilio.com/console/projects/create">create a new project</a> and view the project's Account SID and Auth Token. Save both into environment variables in the .env file named "TWILIO_ACCOUNT_SID" and "TWILIO_AUTH_TOKEN" respectively. From the same dashboard, retrieve your Twilio phone number and store it into another environment variable called "SENDER_SMS" (include the plus sign at the beginning).
+
 Sample file contents of the .env file could include:
 
 ```sh
 ALPHAVANTAGE_API_KEY="abc123" # "abc123" being your API Key
 SENDGRID_API_KEY="123abc"
+TWILIO_ACCOUNT_SID="1a2b3c"
+TWILIO_AUTH_TOKEN="a1b2c3"
+SENDER_SMS=+12345678900
 ```
 
 ## Usage

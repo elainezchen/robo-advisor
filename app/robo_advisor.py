@@ -9,6 +9,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+from twilio.rest import Client
 
 d = datetime.now()
 dt = d.strftime("%m/%d/%Y %H:%M")
@@ -126,7 +127,13 @@ while True:
     answer2 = input("Would the customer like to be notified if the price has increased or decreased by more than 5% within the past day? [Y/N] ")
     if answer2.lower() == "y":
         email = input("What is the customer's email address? ")
+        number = input("What is the customer's phone number? ")
+
         SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
+        TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", "OOPS, please specify env var called 'TWILIO_ACCOUNT_SID'")
+        TWILIO_AUTH_TOKEN  = os.environ.get("TWILIO_AUTH_TOKEN", "OOPS, please specify env var called 'TWILIO_AUTH_TOKEN'")
+        SENDER_SMS  = os.environ.get("SENDER_SMS", "OOPS, please specify env var called 'SENDER_SMS'")
+        
         client = SendGridAPIClient(SENDGRID_API_KEY)
         subject = "Price Change Notification"
         if (float(latest_close)>=(1.05*float(previous_close))):
@@ -134,7 +141,7 @@ while True:
         elif (float(latest_close)<=(0.95*float(previous_close))):
             html_variable = "decreased"
         else:
-            print("The email will be sent if the price has changed. Thank you for using Robo Advisor!")
+            print("The email and text will be sent if the price has changed. Thank you for using Robo Advisor!")
             exit()
 
         html_content = f"""
@@ -153,14 +160,16 @@ while True:
         except Exception as e:
             print("OOPS", e.message)
 
-        print("The email has been sent. Thank you for using Robo Advisor!")
+        client2 = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+        content = f"The price for {symbol} has {html_variable} by more than 5% in the past day."
+        message2 = client2.messages.create(to=number, from_=SENDER_SMS, body=content)
+        
+        print("The email and text have been sent. Thank you for using Robo Advisor!")
         exit()
 
     elif answer2.lower() == "n":
-
         print("Thank you for using Robo Advisor!")
         exit()
-
     else:
         print("Please input [Y] or [N] only.")
 
