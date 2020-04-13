@@ -156,7 +156,7 @@ while True:
 
         message = Mail(from_email=email, to_emails=email, subject=subject, html_content=html_content)
 
-        try:
+        try: 
             response = client.send(message)
         except Exception as e:
             print("OOPS", e.message)
