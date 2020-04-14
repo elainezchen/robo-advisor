@@ -11,6 +11,8 @@ def test_to_usd():
     Tests the to_usd function.
     """
     assert to_usd(1000.2342) == "$1,000.23"
+    assert to_usd(100.23) == "$100.23"
+    assert to_usd(100.2) == "$100.20"
 
 def test_compile_url():
     """
