@@ -36,13 +36,16 @@ def compile_url(symbol, API_KEY):
     """
     return f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={API_KEY}"
 
+def get_response(request_url):
+    return requests.get(request_url)
+
 if __name__ == "__main__":
 
     while True:
         symbol = input("Please input a stock or cryptocurrency symbol: ")
         if (len(symbol) <= 5 and len(symbol) >= 1 and symbol.isnumeric()) == False:
             request_url = compile_url(symbol, API_KEY)
-            response = requests.get(request_url)
+            response = get_response(request_url)
             if "Error Message" in response.text:
                 print("OOPS couldn't find that symbol, please try again!")
                 exit()
