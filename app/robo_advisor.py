@@ -37,7 +37,25 @@ def compile_url(symbol, API_KEY):
     return f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={API_KEY}"
 
 def get_response(request_url):
+    """
+    Returns a response object from an inputted url.
+    Param: request_url (any url)
+    """
     return requests.get(request_url)
+
+def parse_response(response):
+    """
+    Returns a dictionary parsed from a response object.
+    Param: response (response object)
+    """
+    return json.loads(response.text)
+
+def return_keys(tsd):
+    """
+    Returns a dictionary made from another dictionary's keys.
+    Param: tsd (dictionary)
+    """
+    return list(tsd.keys())
 
 if __name__ == "__main__":
 
@@ -53,11 +71,11 @@ if __name__ == "__main__":
         else:
             print("Are you sure that was a valid symbol? Please try again!")
 
-    parsed_response = json.loads(response.text)
+    parsed_response = parse_response(response)
 
     last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
     tsd = parsed_response["Time Series (Daily)"]
-    dates = list(tsd.keys()) 
+    dates = return_keys(tsd) 
     latest_day = dates[0]
     previous_day = dates[1]
     latest_close = float(tsd[latest_day]["4. close"])
