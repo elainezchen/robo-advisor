@@ -19,6 +19,12 @@ load_dotenv()
 API_KEY = os.environ.get("ALPHAVANTAGE_API_KEY", default="OOPS")
 
 def to_usd(my_price):
+    """
+    Converts a numeric value to usd-formatted string, for printing and display purposes.
+    Param: my_price (int or float) like 1000.2342
+    Example: to_usd(1000.2342)
+    Returns: $1,000.23
+    """
     return "${0:,.2f}".format(my_price)
 
 while True:
