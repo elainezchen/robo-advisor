@@ -47,25 +47,25 @@ tsd = parsed_response["Time Series (Daily)"]
 dates = list(tsd.keys()) 
 latest_day = dates[0]
 previous_day = dates[1]
-latest_close = tsd[latest_day]["4. close"]
-previous_close = tsd[previous_day]["4. close"]
+latest_close = float(tsd[latest_day]["4. close"])
+previous_close = float(tsd[previous_day]["4. close"])
 
 high_prices = []
 low_prices = []
 closing_prices = []
 
 for date in dates:
-    high_price = tsd[date]["2. high"]
-    low_price = tsd[date]["3. low"]
-    closing_price = tsd[date]["4. close"]
-    closing_prices.append(float(closing_price))
-    high_prices.append(float(high_price))
-    low_prices.append(float(low_price))
+    high_price = float(tsd[date]["2. high"])
+    low_price = float(tsd[date]["3. low"])
+    closing_price = float(tsd[date]["4. close"])
+    closing_prices.append(closing_price)
+    high_prices.append(high_price)
+    low_prices.append(low_price)
 
-recent_high = max(high_prices)
-recent_low = min(low_prices)
+recent_high = float(max(high_prices))
+recent_low = float(min(low_prices))
 
-if (float(latest_close) <= (1.2 * float(recent_low))):
+if (latest_close <= (1.2 * recent_low)):
     rec = "BUY"
     rec_exp = "The latest closing price of " + symbol + " is less than 20% above its recent low. Now is a good time to buy."
 else:
@@ -96,9 +96,9 @@ print("REQUESTING STOCK MARKET DATA...")
 print(f"REQUEST AT: {dt}") 
 print("-------------------------")
 print(f"LATEST DAY: {last_refreshed}")
-print(f"LATEST CLOSE: {to_usd(float(latest_close))}")
-print(f"RECENT HIGH: {to_usd(float(recent_high))}")
-print(f"RECENT LOW: {to_usd(float(recent_low))}")
+print(f"LATEST CLOSE: {to_usd(latest_close)}")
+print(f"RECENT HIGH: {to_usd(recent_high)}")
+print(f"RECENT LOW: {to_usd(recent_low)}")
 print("-------------------------")
 print(f"RECOMMENDATION: {rec}") 
 print(f"RECOMMENDATION REASON: {rec_exp}") 
@@ -143,9 +143,9 @@ while True:
         
         client = SendGridAPIClient(SENDGRID_API_KEY)
         subject = "Price Change Notification"
-        if (float(latest_close)>=(1.05*float(previous_close))):
+        if (latest_close>=(1.05*previous_close)):
             html_variable = "increased"
-        elif (float(latest_close)<=(0.95*float(previous_close))):
+        elif (latest_close<=(0.95*previous_close)):
             html_variable = "decreased"
         else:
             print("The email and text will be not be sent since the price has not changed. Thank you for using Robo Advisor!")
@@ -155,8 +155,8 @@ while True:
         <h3>Price Change Notification</h3>
         <p>Current date and time: {dt} </p>
         <p>Latest day acquired for {symbol}: {latest_day} </p>
-        <p>Latest closing price: {to_usd(float(latest_close))} </p>
-        <p>Previous closing price: {to_usd(float(previous_close))} </p>
+        <p>Latest closing price: {to_usd(latest_close)} </p>
+        <p>Previous closing price: {to_usd(previous_close)} </p>
         <p>{symbol}'s price has {html_variable} by more than 5% in the past day.</p>
         """
 
