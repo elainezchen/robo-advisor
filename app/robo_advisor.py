@@ -89,6 +89,14 @@ with open(csv_file_path, "w") as csv_file:
         })
 
 def print_message(message):
+    """
+    Converts string values into text with a line of dashes above it for simplification.
+    Param: message (string) like "hello"
+    Example: print_message("hello")
+    Returns: 
+    -------------------------
+    hello
+    """
     print("-------------------------")
     print(message)
 
