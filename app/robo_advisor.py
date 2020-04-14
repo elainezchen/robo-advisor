@@ -42,7 +42,6 @@ while True:
 parsed_response = json.loads(response.text)
 
 last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
-
 tsd = parsed_response["Time Series (Daily)"]
 dates = list(tsd.keys()) 
 latest_day = dates[0]
@@ -88,25 +87,20 @@ with open(csv_file_path, "w") as csv_file:
             "close": daily_prices["4. close"],
             "volume": daily_prices["5. volume"]
         })
-    
-print("-------------------------")
-print(f"SELECTED SYMBOL: {symbol}")
-print("-------------------------")
-print("REQUESTING STOCK MARKET DATA...")
-print(f"REQUEST AT: {dt}") 
-print("-------------------------")
-print(f"LATEST DAY: {last_refreshed}")
-print(f"LATEST CLOSE: {to_usd(latest_close)}")
-print(f"RECENT HIGH: {to_usd(recent_high)}")
-print(f"RECENT LOW: {to_usd(recent_low)}")
-print("-------------------------")
-print(f"RECOMMENDATION: {rec}") 
-print(f"RECOMMENDATION REASON: {rec_exp}") 
-print("-------------------------")
-print(f"WRITING DATA TO CSV: {csv_file_path}...")
-print("-------------------------")
-print("HAPPY INVESTING!")
-print("-------------------------")
+
+def print_message(message):
+    print("-------------------------")
+    print(message)
+
+email_message = f"LATEST DAY: {last_refreshed}\n"+f"LATEST CLOSE: {to_usd(latest_close)}"
+email_message += f"\nRECENT HIGH: {to_usd(recent_high)}\n"+f"RECENT LOW: {to_usd(recent_low)}"
+
+print_message(f"SELECTED SYMBOL: {symbol}")
+print_message("REQUESTING STOCK MARKET DATA...\n"+f"REQUEST AT: {dt}")
+print_message(email_message)
+print_message(f"RECOMMENDATION: {rec}\n"+f"RECOMMENDATION REASON: {rec_exp}") 
+print_message(f"WRITING DATA TO CSV: {csv_file_path}...")
+print_message("HAPPY INVESTING!\n-------------------------")
 
 while True:
     answer = input("Would you like to create a line graph of recent high, low, and closing prices for " + symbol + "? [Y/N] ")
@@ -126,7 +120,6 @@ while True:
 
     elif answer.lower() == "n":        
         break
-
     else:
         print("Please input [Y] or [N] only.")
 
@@ -154,9 +147,7 @@ while True:
         html_content = f"""
         <h3>Price Change Notification</h3>
         <p>Current date and time: {dt} </p>
-        <p>Latest day acquired for {symbol}: {latest_day} </p>
-        <p>Latest closing price: {to_usd(latest_close)} </p>
-        <p>Previous closing price: {to_usd(previous_close)} </p>
+        <p>{email_message}</p>
         <p>{symbol}'s price has {html_variable} by more than 5% in the past day.</p>
         """
 
